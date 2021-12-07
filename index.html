@@ -38,41 +38,46 @@
             height: 100px;
             bottom: 10%;
             background-color: transparent;
-            
+
         }
-        .shopItem{
+
+        .shopItem {
             height: 100px;
             width: 85%;
             border-radius: 10px;
             font-size: 1.5vw;
         }
-        .itemInfo{
+
+        .itemInfo {
             border-radius: 10px;
             background-color: white;
             box-shadow: 0.5px 1px 0.5px 0.5px rgb(185, 182, 182);
         }
-        .nav-bar{
+
+        .nav-bar {
             height: 40px;
             position: relative;
         }
-        .nav-bar-title{
+
+        .nav-bar-title {
             margin: auto;
         }
-        .nav-bar-img{
+
+        .nav-bar-img {
             position: absolute;
             right: 0px;
             padding: 0;
             max-width: 100px;
             max-height: 40px;
         }
-        #listBtn{
+
+        #listBtn {
             margin-top: 5px;
             margin-left: 5px;
             background-color: white;
         }
-        .dropdown-menu li{
-        }
-      
+
+    
     </style>
 </head>
 
@@ -83,7 +88,8 @@
                 <div class="row nav-bar m-0 align-items-center">
                     <div class="nav-bar-title col-12 p-0 m-0 text-center h4 position-absolute  ">附近投注站
                     </div>
-                    <img class="nav-bar-img" src="/image/unselectedHanberger.png"   alt="">
+                 
+                    <img class="nav-bar-img" src="/image/unselectedHanberger.png" alt="">
                 </div>
                 <div id="map" class="w-100 h-100 m-0 "></div>
             </div>
@@ -92,7 +98,7 @@
                     <div class="col-12 pb-2 pt-2 itemInfo h-100">
                         <div class="row h-50">
                             <div class="col-8 m-0 ps-2 pe-0 ">
-                                {{array.name}} 
+                                {{array.name}}
                             </div>
                             <div class="col-4 m-0 ps-0 pe-1 text-center">
                                 {{array.distance}} 公里
@@ -100,7 +106,8 @@
                         </div>
                         <div class="row h-50 ">
                             <div class="col-8 m-0 ps-2 pe-1">{{array.address}}</div>
-                            <div class="col-4 m-0 ps-1 pe-1"><button class="btn w-100 p-0 btn-primary" v-on:click="navigat()">導航</button></div>
+                            <div class="col-4 m-0 ps-1 pe-1"><button class="btn w-100 p-0 btn-primary"
+                                    v-on:click="navigat()">導航</button></div>
                         </div>
                     </div>
 

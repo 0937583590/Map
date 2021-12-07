@@ -7,26 +7,29 @@ myapp = Vue.createApp({
       googleMap: Object,
       googleMarker: [],
       slicker: Object,
+      nowDistance: 1,
+      isInit:false
     };
   },
   async mounted() {
     await this.getUserLocation().then();
-    await this.roadShopData(5);
-    this.setMap();
+    await this.roadShopData();
+    this.setMyMap();
     this.setMarker();
     this.setSlicker();
-    //   this.addSelectDistance()
+    this.isInit=true
     console.log("done!");
   },
   methods: {
-    async roadShopData(distance) {
+    async roadShopData() {
+      this.shopList=[]
       const requestOptions = {
         method: "POST",
         headers: { Encrypt: "[1]", "Content-Type": "application/json" },
         body: JSON.stringify({
           lat: this.userLat,
           lon: this.userLon,
-          distance: distance,
+          distance: this.nowDistance,
         }),
       };
       var response = await fetch(
@@ -37,21 +40,18 @@ myapp = Vue.createApp({
           return res.json();
         })
         .then((result) => {
-          let newShopArray = [];
           let shopnum = 0;
           while (shopnum < result.content.list.length) {
-            if(shopnum>=250)
-                break;
-             newShopArray.push(result.content.list[shopnum]);
-             shopnum++;
+            if (shopnum >= 250) {
+              alert("附近超過250家投注站")
+              break;
+            }
+            this.shopList.push(result.content.list[shopnum]);
+            console.log("新增"+result.content.list[shopnum].name);
+
+            shopnum++;
           }
-          let isNum=1
-          this.shopList = newShopArray;
-          for (shops of this.shopList){
-            console.log(shops.name + "  " + shops.address);
-            console.log(isNum+"次執行")
-            isNum++;
-          }
+     
         });
     },
     async getUserLocation() {
@@ -73,7 +73,7 @@ myapp = Vue.createApp({
         );
       });
     },
-    setMap() {
+    setMyMap() {
       let mapOption = {
         center: { lat: this.userLat, lng: this.userLon },
         zoom: 17,
@@ -83,6 +83,7 @@ myapp = Vue.createApp({
         document.getElementById("map"),
         mapOption
       );
+      this.addSelectDistance();
     },
     setMarker() {
       let index = 0;
@@ -103,6 +104,7 @@ myapp = Vue.createApp({
           this.googleMap.setZoom(19);
         });
         this.googleMarker.push(marker);
+
         index++;
       }
     },
@@ -113,8 +115,9 @@ myapp = Vue.createApp({
         slidesToShow: 1,
         centerMode: true,
       });
-      let markerArray = this.googleMarker;
-      let thismap = this.googleMap;
+      isInit=this.isInit
+       markerArray = this.googleMarker;
+       thismap = this.googleMap;
 
       thismap.setCenter(
         markerArray[this.slicker.slick("slickCurrentSlide")].getPosition()
@@ -122,18 +125,18 @@ myapp = Vue.createApp({
       markerArray[this.slicker.slick("slickCurrentSlide")].setIcon({
         url: "/./image/selectedIcon.png",
       });
+      if(!isInit){
       this.slicker.on(
         "beforeChange",
         function (event, slick, currentSlide, nextSlide) {
+          console.log(markerArray[nextSlide])
           thismap.setCenter(markerArray[nextSlide].getPosition());
           markerArray[currentSlide].setIcon({
             url: "/./image/unselectedIcon.png",
           });
-          console.log("reset!");
           markerArray[nextSlide].setIcon({ url: "/./image/selectedIcon.png" });
-          console.log("setting!");
         }
-      );
+      );}
     },
     navigat() {
       var currentsite = this.slicker.slick("slickCurrentSlide");
@@ -149,7 +152,7 @@ myapp = Vue.createApp({
       listBtn.type = "button";
       listBtn.id = "listBtn";
       listBtn.setAttribute("data-bs-toggle", "dropdown");
-      listBtn.innerHTML = "1公里";
+      listBtn.innerHTML = this.nowDistance + "公里";
       listDiv.appendChild(listBtn);
 
       const listUl = document.createElement("ul");
@@ -160,15 +163,32 @@ myapp = Vue.createApp({
         ItemLink.className = "dropdown-item";
         ItemLink.href = "#";
         ItemLink.innerHTML = itemDistance + "公里";
-        ItemLink.onclick = async () => {
-          document.getElementById("listBtn").innerHTML = ItemLink.innerHTML;
-          await this.roadShopData(itemDistance);
+        ItemLink.setAttribute("distance", itemDistance);
+        ItemLink.addEventListener(
+          "click",
+          async (e) => {
+            document.getElementById("listBtn").innerHTML = ItemLink.innerHTML;
+            this.nowDistance = parseInt(e.target.getAttribute("distance"));
+            console.log(e.target.getAttribute("distance"));
 
-          this.slicker.slick("unslick");
-          this.setMarker();
-          this.setSlicker();
-          console.log("reload done!");
-        };
+            // await (async function () {
+            //   return new Promise();
+            // })();
+            this.slicker.slick("unslick");
+            this.shopList=[]
+            await this.roadShopData();
+            console.log("reload done!");
+            for (nullmarker of this.googleMarker) {
+              nullmarker.setMap(null);
+              console.log("清除" + nullmarker.title);
+            }
+            this.googleMarker = [];
+            this.setMyMap();
+            this.setMarker();
+            this.setSlicker();
+          },
+          false
+        );
         listItem.appendChild(ItemLink);
         listUl.appendChild(listItem);
       }
