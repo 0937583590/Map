@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="app.js" async diff></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJiBSlwNxZcngn9vQ5jSSp2ONp8IPUtSc" async
+        defer></script>
+    <style>
+        html {
+            height: 100vh;
+            width: 100%;
+        }
+
+        body {
+            height: 100%;
+        }
+
+        .mapContent {
+            height: 100%;
+            flex-grow: 1;
+        }
+
+        .shoplist {
+            height: 100px;
+            bottom: 10%;
+            background-color: transparent;
+            
+        }
+        .shopItem{
+            height: 100px;
+            width: 85%;
+            border-radius: 10px;
+            font-size: 1.5vw;
+        }
+        .itemInfo{
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0.5px 1px 0.5px 0.5px rgb(185, 182, 182);
+        }
+        .nav-bar{
+            height: 40px;
+            position: relative;
+        }
+        .nav-bar-title{
+            margin: auto;
+        }
+        .nav-bar-img{
+            position: absolute;
+            right: 0px;
+            padding: 0;
+            max-width: 100px;
+            max-height: 40px;
+        }
+        #listBtn{
+            margin-top: 5px;
+            margin-left: 5px;
+            background-color: white;
+        }
+        .dropdown-menu li{
+        }
+      
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid h-100" id="myApp">
+        <div class="row justify-content-center  h-100 m-0 position-relative">
+            <div class="col mapContent h-100 d-flex p-0 flex-column position-relative ">
+                <div class="row nav-bar m-0 align-items-center">
+                    <div class="nav-bar-title col-12 p-0 m-0 text-center h4 position-absolute  ">附近投注站
+                    </div>
+                    <img class="nav-bar-img" src="/image/unselectedHanberger.png"   alt="">
+                </div>
+                <div id="map" class="w-100 h-100 m-0 "></div>
+            </div>
+            <div id="shoplist" class="shoplist  row p-0  position-absolute">
+                <div class="row shopItem m-0 p-0   ps-2 pe-2" v-for="(array,index) in shopList">
+                    <div class="col-12 pb-2 pt-2 itemInfo h-100">
+                        <div class="row h-50">
+                            <div class="col-8 m-0 ps-2 pe-0 ">
+                                {{array.name}} 
+                            </div>
+                            <div class="col-4 m-0 ps-0 pe-1 text-center">
+                                {{array.distance}} 公里
+                            </div>
+                        </div>
+                        <div class="row h-50 ">
+                            <div class="col-8 m-0 ps-2 pe-1">{{array.address}}</div>
+                            <div class="col-4 m-0 ps-1 pe-1"><button class="btn w-100 p-0 btn-primary" v-on:click="navigat()">導航</button></div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
