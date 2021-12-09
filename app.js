@@ -8,21 +8,23 @@ myapp = Vue.createApp({
       googleMarker: [],
       slicker: Object,
       nowDistance: 1,
-      isInit:false
+      isInit: false,
+      isHamburgerSelected: false,
     };
   },
   async mounted() {
-    await this.getUserLocation().then();
+    await this.getUserLocation().then((message)=>{console.log(message)});
     await this.roadShopData();
     this.setMyMap();
     this.setMarker();
     this.setSlicker();
-    this.isInit=true
+    this.addHamburger();
+    this.isInit = true;
     console.log("done!");
   },
   methods: {
     async roadShopData() {
-      this.shopList=[]
+      this.shopList = [];
       const requestOptions = {
         method: "POST",
         headers: { Encrypt: "[1]", "Content-Type": "application/json" },
@@ -32,7 +34,7 @@ myapp = Vue.createApp({
           distance: this.nowDistance,
         }),
       };
-      var response = await fetch(
+       await fetch(
         "https://smuat.megatime.com.tw/taiwanlottery/api/Home/Station/",
         requestOptions
       )
@@ -43,32 +45,32 @@ myapp = Vue.createApp({
           let shopnum = 0;
           while (shopnum < result.content.list.length) {
             if (shopnum >= 250) {
-              alert("附近超過250家投注站")
+              alert("附近超過250家投注站");
               break;
             }
             this.shopList.push(result.content.list[shopnum]);
-            console.log("新增"+result.content.list[shopnum].name);
+            console.log("新增" + result.content.list[shopnum].name);
 
             shopnum++;
           }
-     
         });
     },
-    async getUserLocation() {
+    getUserLocation() {
       return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
+            console.log("定位中");
             let lat = position.coords.latitude;
             this.userLat = lat;
             let lon = position.coords.longitude;
             this.userLon = lon;
             console.log(this.userLat);
             console.log(this.userLon);
-            resolve();
+            resolve("定位成功");
           },
-          (error) => {
+          () => {
             console.log("定位失敗");
-            reject();
+            reject("定位失敗");
           }
         );
       });
@@ -94,7 +96,7 @@ myapp = Vue.createApp({
           index: index,
           position: new google.maps.LatLng(shop.lat, shop.lon),
           icon: {
-            url: "/./image/unselectedIcon.png",
+            url: "unselectedIcon.png",
           },
           map: this.googleMap,
         });
@@ -115,46 +117,51 @@ myapp = Vue.createApp({
         slidesToShow: 1,
         centerMode: true,
       });
-      isInit=this.isInit
-       markerArray = this.googleMarker;
-       thismap = this.googleMap;
+      isInit = this.isInit;
+      markerArray = this.googleMarker;
+      thismap = this.googleMap;
 
       thismap.setCenter(
         markerArray[this.slicker.slick("slickCurrentSlide")].getPosition()
       );
       markerArray[this.slicker.slick("slickCurrentSlide")].setIcon({
-        url: "/./image/selectedIcon.png",
+        url: "selectedIcon.png",
       });
-      if(!isInit){
-      this.slicker.on(
-        "beforeChange",
-        function (event, slick, currentSlide, nextSlide) {
-          console.log(markerArray[nextSlide])
-          thismap.setCenter(markerArray[nextSlide].getPosition());
-          markerArray[currentSlide].setIcon({
-            url: "/./image/unselectedIcon.png",
-          });
-          markerArray[nextSlide].setIcon({ url: "/./image/selectedIcon.png" });
-        }
-      );}
+      if (!isInit) {
+        this.slicker.on(
+          "beforeChange",
+          function (event, slick, currentSlide, nextSlide) {
+            console.log(markerArray[nextSlide]);
+            thismap.setCenter(markerArray[nextSlide].getPosition());
+            markerArray[currentSlide].setIcon({
+              url: "unselectedIcon.png",
+            });
+            markerArray[nextSlide].setIcon({
+              url: "selectedIcon.png",
+            });
+          }
+        );
+      }
     },
-    navigat() {
-      var currentsite = this.slicker.slick("slickCurrentSlide");
-
-      console.log(currentsite);
+    navigat(shopAddress) {
+      window.open(
+        "http://www.google.com/maps/dir/" +
+          this.userLat +
+          "," +
+          this.userLon +
+          "/" +
+          shopAddress
+      );
     },
     addSelectDistance() {
       const listDiv = document.createElement("div");
-
       const listBtn = document.createElement("button");
-
       listBtn.className = "btn dropdown-toggle";
       listBtn.type = "button";
       listBtn.id = "listBtn";
       listBtn.setAttribute("data-bs-toggle", "dropdown");
       listBtn.innerHTML = this.nowDistance + "公里";
       listDiv.appendChild(listBtn);
-
       const listUl = document.createElement("ul");
       listUl.className = "dropdown-menu";
       for (itemDistance of [1, 2, 5]) {
@@ -170,12 +177,8 @@ myapp = Vue.createApp({
             document.getElementById("listBtn").innerHTML = ItemLink.innerHTML;
             this.nowDistance = parseInt(e.target.getAttribute("distance"));
             console.log(e.target.getAttribute("distance"));
-
-            // await (async function () {
-            //   return new Promise();
-            // })();
             this.slicker.slick("unslick");
-            this.shopList=[]
+            this.shopList = [];
             await this.roadShopData();
             console.log("reload done!");
             for (nullmarker of this.googleMarker) {
@@ -198,6 +201,24 @@ myapp = Vue.createApp({
       this.googleMap.controls[google.maps.ControlPosition.TOP_LEFT].push(
         listDiv
       );
+    },
+     addHamburger() {
+      hamburger = document.getElementById("hamburger");
+      boxlist = document.getElementById("outercontainer");
+      hamburger.onclick = () => {
+        if (!this.isHamburgerSelected) {
+          hamburger.src = "selectedHanberger.png";
+          this.isHamburgerSelected = !this.isHamburgerSelected;
+          boxlist.classList.remove("unactive");
+
+          boxlist.classList.add("active");
+        } else {
+          hamburger.src="unselectedHanberger.png"
+          this.isHamburgerSelected = !this.isHamburgerSelected;
+          boxlist.classList.add("unactive");
+          boxlist.classList.remove("active");
+        }
+      };
     },
   },
 });
