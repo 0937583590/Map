@@ -187,6 +187,7 @@ myapp = Vue.createApp({
         ItemLink.addEventListener(
           "click",
           async (e) => {
+           
             document.getElementById("listBtn").innerHTML = ItemLink.innerHTML;
             this.nowDistance = parseInt(e.target.getAttribute("distance"));
             console.log(e.target.getAttribute("distance"));
@@ -202,6 +203,7 @@ myapp = Vue.createApp({
             this.setMyMap();
             this.setMarker();
             this.setSlicker();
+            this.resetFontsiz()
           },
           false
         );
@@ -215,6 +217,20 @@ myapp = Vue.createApp({
         listDiv
       );
     },
+    resetFontsiz(){
+      let infoboxs=document.querySelectorAll(".itemInfo")
+      if (this.windowSize < 700) {
+        for(infobox of infoboxs){
+          infobox.style.fontSize="16px"
+        }
+      }
+      else{
+        for(infobox of infoboxs){
+          infobox.style.fontSize="1.5vw"
+        }
+      }
+    }
+    ,
     addHamburger() {
       hamburger = document.getElementById("hamburger");
       boxlist = document.getElementById("outercontainer");
@@ -235,18 +251,8 @@ myapp = Vue.createApp({
     },
   },
   watch: {
-    windowSize(size) {
-      infoboxs=document.querySelectorAll(".itemInfo")
-      if (size < 600) {
-        for(infobox of infoboxs){
-          infobox.style.fontSize="16px"
-        }
-      }
-      else{
-        for(infobox of infoboxs){
-          infobox.style.fontSize="1.5vw"
-        }
-      }
+    windowSize() {
+      this.resetFontsiz()
     },
   },
 });
