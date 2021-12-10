@@ -9,6 +9,7 @@ myapp = Vue.createApp({
       slicker: Object,
       nowDistance: 1,
       isInit: false,
+      windowSize:document.body.clientWidth,
       isHamburgerSelected: false,
     };
   },
@@ -19,8 +20,12 @@ myapp = Vue.createApp({
     this.setMarker();
     this.setSlicker();
     this.addHamburger();
+    this.resetOnrest();
+    //this.settingFontSize();
+    
     this.isInit = true;
     console.log("done!");
+
   },
   methods: {
     async roadShopData() {
@@ -73,6 +78,11 @@ myapp = Vue.createApp({
           }
         );
       });
+    },
+    resetOnrest(){
+      window.onresize=()=>{
+        this.windowSize=document.body.clientWidth
+      }
     },
     setMyMap() {
       let mapOption = {
@@ -153,6 +163,7 @@ myapp = Vue.createApp({
           shopAddress
       );
     },
+    
     addSelectDistance() {
       const listDiv = document.createElement("div");
       const listBtn = document.createElement("button");
@@ -221,6 +232,12 @@ myapp = Vue.createApp({
       };
     },
   },
+  watch:{
+    windowSize(size){
+        if(size<500)
+        document.getElementById("itemInfo").style.fontSize="16px"
+      }
+  }
 });
 
 myapp.mount("#myApp");
