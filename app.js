@@ -67,9 +67,9 @@ myapp = Vue.createApp({
             console.log(this.userLon);
             resolve("定位成功");
           },
-          () => {
-            console.log("定位失敗");
-            reject("定位失敗");
+          (error) => {
+            alert('ERROR(' + error.code + '): ' + error.message);
+             reject("定位失敗");
           }
         );
       });
@@ -77,6 +77,7 @@ myapp = Vue.createApp({
     setMyMap() {
       let mapOption = {
         center: { lat: this.userLat, lng: this.userLon },
+        gestureHandling: "greedy",
         zoom: 17,
         disableDefaultUI: true,
       };
