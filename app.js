@@ -9,12 +9,14 @@ myapp = Vue.createApp({
       slicker: Object,
       nowDistance: 1,
       isInit: false,
-      windowSize:document.body.clientWidth,
+      windowSize: 0,
       isHamburgerSelected: false,
     };
   },
   async mounted() {
-    await this.getUserLocation().then((message)=>{console.log(message)});
+    await this.getUserLocation().then((message) => {
+      console.log(message);
+    });
     await this.roadShopData();
     this.setMyMap();
     this.setMarker();
@@ -22,10 +24,9 @@ myapp = Vue.createApp({
     this.addHamburger();
     this.resetOnrest();
     //this.settingFontSize();
-    
+
     this.isInit = true;
     console.log("done!");
-
   },
   methods: {
     async roadShopData() {
@@ -39,7 +40,7 @@ myapp = Vue.createApp({
           distance: this.nowDistance,
         }),
       };
-       await fetch(
+      await fetch(
         "https://smuat.megatime.com.tw/taiwanlottery/api/Home/Station/",
         requestOptions
       )
@@ -73,16 +74,17 @@ myapp = Vue.createApp({
             resolve("定位成功");
           },
           (error) => {
-            alert('ERROR(' + error.code + '): ' + error.message);
-             reject("定位失敗");
+            alert("ERROR(" + error.code + "): " + error.message);
+            reject("定位失敗");
           }
         );
       });
     },
-    resetOnrest(){
-      window.onresize=()=>{
-        this.windowSize=document.body.clientWidth
-      }
+    resetOnrest() {
+      this.windowSize=document.body.clientWidth;
+      window.onresize = () => {
+        this.windowSize = document.body.clientWidth;
+      };
     },
     setMyMap() {
       let mapOption = {
@@ -163,7 +165,7 @@ myapp = Vue.createApp({
           shopAddress
       );
     },
-    
+
     addSelectDistance() {
       const listDiv = document.createElement("div");
       const listBtn = document.createElement("button");
@@ -213,7 +215,7 @@ myapp = Vue.createApp({
         listDiv
       );
     },
-     addHamburger() {
+    addHamburger() {
       hamburger = document.getElementById("hamburger");
       boxlist = document.getElementById("outercontainer");
       hamburger.onclick = () => {
@@ -224,7 +226,7 @@ myapp = Vue.createApp({
 
           boxlist.classList.add("active");
         } else {
-          hamburger.src="unselectedHanberger.png"
+          hamburger.src = "unselectedHanberger.png";
           this.isHamburgerSelected = !this.isHamburgerSelected;
           boxlist.classList.add("unactive");
           boxlist.classList.remove("active");
@@ -232,12 +234,16 @@ myapp = Vue.createApp({
       };
     },
   },
-  watch:{
-    windowSize(size){
-        if(size<600)
-        document.getElementById("shoplist").style.fontSize="16px"
+  watch: {
+    windowSize(size) {
+      if (size < 600) {
+        infoboxs=document.querySelectorAll(".itemInfo")
+        for(infobox of infoboxs){
+          infobox.style.fontSize="16px"
+        }
       }
-  }
+    },
+  },
 });
 
 myapp.mount("#myApp");
