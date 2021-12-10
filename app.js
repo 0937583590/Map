@@ -236,10 +236,15 @@ myapp = Vue.createApp({
   },
   watch: {
     windowSize(size) {
+      infoboxs=document.querySelectorAll(".itemInfo")
       if (size < 600) {
-        infoboxs=document.querySelectorAll(".itemInfo")
         for(infobox of infoboxs){
           infobox.style.fontSize="16px"
+        }
+      }
+      else{
+        for(infobox of infoboxs){
+          infobox.style.fontSize="1.5vw"
         }
       }
     },
