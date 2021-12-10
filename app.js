@@ -234,8 +234,8 @@ myapp = Vue.createApp({
   },
   watch:{
     windowSize(size){
-        if(size<500)
-        document.getElementById("itemInfo").style.fontSize="16px"
+        if(size<600)
+        document.getElementById("shoplist").style.fontSize="16px"
       }
   }
 });
