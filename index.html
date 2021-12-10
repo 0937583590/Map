@@ -13,8 +13,8 @@
     <title>Document</title>
     <script src="https://unpkg.com/vue@next"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="app.js" async diff></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJiBSlwNxZcngn9vQ5jSSp2ONp8IPUtSc" async
@@ -90,7 +90,7 @@
 
         }
 
-    
+
 
         ::-webkit-scrollbar {
             display: none;
@@ -106,9 +106,10 @@
             visibility: hidden;
 
         }
-        .innerContainer{
+
+        .innerContainer {
             margin-left: auto;
-            background-color:transparent;
+            background-color: transparent;
             flex-grow: 1;
             flex-direction: row;
             overflow-x: hidden;
@@ -116,52 +117,55 @@
             justify-content: flex-end;
 
         }
-        .innerContainer p{
+
+        .innerContainer p {
             display: flex;
         }
-        .active{
-            visibility:visible; 
-            z-index: 999;  
+
+        .active {
+            visibility: visible;
+            z-index: 999;
             animation: fade-in 1s;
         }
-        .boxinfo{
+
+        .boxinfo {
             background-color: white;
-            border:1px solid black;
+            border: 1px solid black;
             border-radius: 10px;
         }
-        .unactive{
-            animation:fade-out 1s;
+
+        .unactive {
+            animation: fade-out 1s;
         }
-      
-       
+
+
         @keyframes fade-in {
             from {
-                z-index: 0; 
-                visibility:hidden;
+                z-index: 0;
+                visibility: hidden;
                 opacity: 0;
             }
 
             to {
-                z-index: 999; 
-                visibility:visible;
+                z-index: 999;
+                visibility: visible;
                 opacity: 1;
             }
         }
+
         @keyframes fade-out {
             from {
-                z-index: 999; 
-                visibility:visible;
+                z-index: 999;
+                visibility: visible;
                 opacity: 1;
             }
 
             to {
-                z-index: 100; 
-                visibility:hidden;
+                z-index: 100;
+                visibility: hidden;
                 opacity: 0;
             }
         }
-     
-      
     </style>
 </head>
 
@@ -172,10 +176,11 @@
                 <div class="row nav-bar m-0 align-items-center">
                     <div class="nav-bar-title col-12 p-0 m-0 text-center h4 position-absolute  ">附近投注站
                     </div>
-                    <div  class="col-12 col-md-4  boxlist  p-0 m-0">
-                       
-                            <img id="hamburger" class="nav-bar-img" class="m-0 p-0 d-flex" src="unselectedHanberger.png" alt="">
-                        
+                    <div class="col-12 col-md-4  boxlist  p-0 m-0">
+
+                        <img id="hamburger" class="nav-bar-img" class="m-0 p-0 d-flex" src="unselectedHanberger.png"
+                            alt="">
+
                         <div id="outercontainer" class="outerContainer m-0 ">
                             <div id="innerContainer" class="innerContainer ">
                                 <div class="boxinfo row  m-1 p-0   ps-2 pe-2" v-for="(array,index) in shopList">
@@ -191,7 +196,6 @@
                                         <div class="row h-50 ">
                                             <div class="col-8 m-0 ps-2 pe-1">{{array.address}}</div>
                                             <div class="col-4 m-0 ps-1 pe-1"><button class="btn w-100 p-0 btn-primary"
-                                                    
                                                     v-on:click="navigat(array.address)">導航</button></div>
                                         </div>
                                     </div>
@@ -219,8 +223,6 @@
                                     v-on:click="navigat(array.address)">導航</button></div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>

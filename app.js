@@ -50,7 +50,6 @@ myapp = Vue.createApp({
             }
             this.shopList.push(result.content.list[shopnum]);
             console.log("新增" + result.content.list[shopnum].name);
-
             shopnum++;
           }
         });
