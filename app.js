@@ -56,6 +56,7 @@ myapp = Vue.createApp({
             }
             this.shopList.push(result.content.list[shopnum]);
             console.log("新增" + result.content.list[shopnum].name);
+            
             shopnum++;
           }
         });
@@ -118,7 +119,7 @@ myapp = Vue.createApp({
           this.googleMap.setZoom(19);
         });
         this.googleMarker.push(marker);
-
+        console.log(marker.getIcon())
         index++;
       }
     },
